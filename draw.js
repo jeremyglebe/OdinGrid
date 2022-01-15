@@ -3,7 +3,7 @@ const { ipcRenderer } = require('electron');
 // Main scaling value for grid. (Square length,
 // hexagon corner-to-corner diameter)
 var PX_SCALE = 100;
-// Current mode (square 0, hex 1) of the grid
+// Current mode (square 0, hex 1, none 2) of the grid
 var GRID_MODE = 0;
 // Determines if the window is currently focused
 var FOCUSED = false;
@@ -37,7 +37,7 @@ function draw() {
     if (GRID_MODE == 0) {
         squares();
     }
-    else {
+    else if (GRID_MODE == 1) {
         hexes();
     }
 }
@@ -45,7 +45,7 @@ function draw() {
 function keyPressed() {
     // Toggle the grid mode when pressing G
     if (key == 'g') {
-        GRID_MODE = (GRID_MODE + 1) % 2;
+        GRID_MODE = (GRID_MODE + 1) % 3;
     }
     // Zoom in/out using +(=) and -
     if (key == '=') {
