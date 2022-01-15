@@ -1,0 +1,14 @@
+{
+  "name": "electron-grid",
+  "version": "0.0.1",
+  "description": "Projects a grid onto the screen",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "drowsyprof",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^16.0.7"
+  }
+}
