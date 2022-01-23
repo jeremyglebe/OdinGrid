@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain, globalShortcut } = require('electron');
 const macOS = process.platform === 'darwin';
 var WINDOW_FOCUSED = false;
 
@@ -40,6 +40,16 @@ function createWindow() {
     win.on('blur', () => {
         WINDOW_FOCUSED = false;
     })
+    // A shortcut to toggle focus on the grid
+    globalShortcut.register('Shift+Alt+G', () => {
+        if (!WINDOW_FOCUSED) {
+            win.show();
+            win.focus();
+        }
+        else {
+            win.blur();
+        }
+    });
 }
 
 // Waits until the app's process is ready
