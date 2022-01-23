@@ -11,7 +11,7 @@ function createWindow() {
         // This window should be see through
         transparent: true,
         // No frame for the window, it just takes up space
-        // frame: false,
+        frame: false,
         // Allows for communication between main.js and draw.js (main process & renderer)
         // This is unsafe if we were loading remote content, but we aren't, so its fine
         // even if SO yells at us for it.
@@ -30,18 +30,15 @@ function createWindow() {
     win.setAlwaysOnTop(true, "screen-saver");
     // Always be visible, even in other workspaces
     win.setVisibleOnAllWorkspaces(true);
+    // Ensures that the app doesn't block mouse clicks and the computer
+    // can still be navigated
+    win.setIgnoreMouseEvents(true);
     // Updates whether the window is currently focused
     win.on('focus', () => {
         WINDOW_FOCUSED = true;
-        // Ensures that the app doesn't block mouse clicks and the computer
-        // can still be navigated
-        win.setIgnoreMouseEvents(false);
     })
     win.on('blur', () => {
         WINDOW_FOCUSED = false;
-        // Ensures that the app doesn't block mouse clicks and the computer
-        // can still be navigated
-        win.setIgnoreMouseEvents(true);
     })
     // A shortcut to toggle focus on the grid
     globalShortcut.register('Shift+Alt+G', () => {
