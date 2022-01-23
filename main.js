@@ -11,7 +11,7 @@ function createWindow() {
         // This window should be see through
         transparent: true,
         // No frame for the window, it just takes up space
-        frame: false,
+        // frame: false,
         // Allows for communication between main.js and draw.js (main process & renderer)
         // This is unsafe if we were loading remote content, but we aren't, so its fine
         // even if SO yells at us for it.
