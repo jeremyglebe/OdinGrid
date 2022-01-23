@@ -30,15 +30,18 @@ function createWindow() {
     win.setAlwaysOnTop(true, "screen-saver");
     // Always be visible, even in other workspaces
     win.setVisibleOnAllWorkspaces(true);
-    // Ensures that the app doesn't block mouse clicks and the computer
-    // can still be navigated
-    win.setIgnoreMouseEvents(true);
     // Updates whether the window is currently focused
     win.on('focus', () => {
         WINDOW_FOCUSED = true;
+        // Ensures that the app doesn't block mouse clicks and the computer
+        // can still be navigated
+        win.setIgnoreMouseEvents(false);
     })
     win.on('blur', () => {
         WINDOW_FOCUSED = false;
+        // Ensures that the app doesn't block mouse clicks and the computer
+        // can still be navigated
+        win.setIgnoreMouseEvents(true);
     })
     // A shortcut to toggle focus on the grid
     globalShortcut.register('Shift+Alt+G', () => {
