@@ -85,8 +85,13 @@ function createPanel() {
     // Load the HTML which displays the P5js grid sketch
     panel.window.loadFile("panel/index.html");
     // Events to set focused/unfocused state
-    panel.window.on('focus', () => { grid.focused = true; });
-    panel.window.on('blur', () => { grid.focused = false; });
+    panel.window.on('focus', () => {
+        grid.focused = true;
+        grid.window.maximize();
+    });
+    panel.window.on('blur', () => {
+        grid.focused = false;
+    });
     // If we close the panel, we close the grid
     panel.window.on('close', () => {
         grid.window.close();

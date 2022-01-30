@@ -45,6 +45,10 @@ function draw() {
     }
 }
 
+function windowResized() {
+    resizeCanvas(displayWidth, displayHeight);
+}
+
 /**
  * Sends a bunch of requests for updated information to the main
  * process. These are things we need to check over and over.
