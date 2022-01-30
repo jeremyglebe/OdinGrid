@@ -59,7 +59,10 @@ function createGrid() {
     // can still be navigated
     if (!DEBUG) grid.window.setIgnoreMouseEvents(true);
     // Events to set focused/unfocused state
-    grid.window.on('focus', () => { grid.focused = true; });
+    grid.window.on('focus', () => {
+        grid.focused = true;
+        grid.window.maximize();
+    });
     grid.window.on('blur', () => { grid.focused = false; });
 }
 
