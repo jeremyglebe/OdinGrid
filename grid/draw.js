@@ -1,31 +1,34 @@
+/// <reference path="../lib/p5.global-mode.d.ts" />
+
 const { ipcRenderer } = require('electron');
 
-// Main scaling value for grid. (Square length,
-// hexagon corner-to-corner diameter)
-var PX_SCALE = 100;
-// Current mode (square 0, hex 1, none 2) of the grid
-var GRID_MODE = 0;
-// Determines if the window is currently focused
-var FOCUSED = false;
-// Amount that the grid scale changes each time a
-// zoom button is pressed
-const ZOOM_INC = 10;
+// Grid display information, updated by main process signals
+let grid = {
+    // Current mode (square 0, hex 1, none 2) of the grid
+    mode: 0,
+    // Main scaling value for grid. (Square length, hexagon corner diameter)
+    scale: 100,
+    // If the app is currently focused
+    focused: false
+}
 
 function setup() {
     // Don't exactly need a high frame rate for this...
     frameRate(10);
     // Create the canvas as big as the entire window
     createCanvas(displayWidth, displayHeight);
+    // Create listeners for main process responses to requests
+    createResponseListeners();
 }
 
 // Runs every frame
 function draw() {
-    // Check whether the window is in focus (ask the Node process)
-    ipcRenderer.send('focus-status-request');
+    // Make requests to the main process to update grid info
+    updateRequests();
     // Clear the screen
     clear();
     // Checks if the app is the active window
-    if (FOCUSED) {
+    if (grid.focused) {
         // Draw a background if we're not overlaying something
         // background(255);
         background('rgba(0,200,255, 0.15)');
@@ -34,37 +37,52 @@ function draw() {
     strokeWeight(2);
     noFill();
     // Check what grid to use then draw
-    if (GRID_MODE == 0) {
+    if (grid.mode == 0) {
         squares();
     }
-    else if (GRID_MODE == 1) {
+    else if (grid.mode == 1) {
         hexes();
     }
 }
 
-function keyPressed() {
-    // Toggle the grid mode when pressing G
-    if (key == 'g') {
-        GRID_MODE = (GRID_MODE + 1) % 3;
-    }
-    // Zoom in/out using +(=) and -
-    if (key == '=') {
-        PX_SCALE += ZOOM_INC;
-    }
-    else if (key == '-' && PX_SCALE - ZOOM_INC > 0) {
-        PX_SCALE -= ZOOM_INC;
-    }
+/**
+ * Sends a bunch of requests for updated information to the main
+ * process. These are things we need to check over and over.
+ */
+function updateRequests() {
+    // Check whether the window is in focus (ask the Node process)
+    ipcRenderer.send('focus-status-request');
+    // Ask the main process for the grid mode
+    ipcRenderer.send('grid-mode-request');
+    // Ask the main process for the grid scale
+    ipcRenderer.send('grid-scale-request');
+}
+
+function createResponseListeners() {
+    // When the Node process sends a focus status, update the FOCUSED variable
+    ipcRenderer.on('focus-status-response', (_, status) => {
+        grid.focused = status;
+    });
+    // Main process updates the grid mode
+    ipcRenderer.on('grid-mode-response', (_, mode) => {
+        grid.mode = mode;
+    });
+    // Main process updates the grid scale
+    ipcRenderer.on('grid-scale-response', (_, scale) => {
+        console.log("response received");
+        grid.scale = scale;
+    });
 }
 
 // Draws a square grid
 function squares() {
     // Draw horizontal lines
-    for (let i = 0; i < height / PX_SCALE; i++) {
-        line(0, i * PX_SCALE, width, i * PX_SCALE);
+    for (let i = 0; i < height / grid.scale; i++) {
+        line(0, i * grid.scale, width, i * grid.scale);
     }
     // Draw vertical lines
-    for (let i = 0; i < width / PX_SCALE; i++) {
-        line(i * PX_SCALE, 0, i * PX_SCALE, height);
+    for (let i = 0; i < width / grid.scale; i++) {
+        line(i * grid.scale, 0, i * grid.scale, height);
     }
 }
 
@@ -76,7 +94,7 @@ function hexes() {
     // For drawing regular polygon, number of sides
     const sides = 6;
     // Radius "size" of the regular hexagon
-    const hex_size = PX_SCALE / 2;
+    const hex_size = grid.scale / 2;
     // Calculated height of the regular hexagon
     const hex_height = Math.sqrt(3) * hex_size;
     // Calculated width of the regular hexagon
@@ -107,8 +125,3 @@ function polygon(x, y, radius, npoints) {
     }
     endShape(CLOSE);
 }
-
-// When the Node process sends a focus status, update the FOCUSED variable
-ipcRenderer.on('focus-status-response', (_, status) => {
-    FOCUSED = status;
-});

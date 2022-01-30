@@ -6,7 +6,9 @@ const IS_MAC = process.platform === 'darwin';
 let grid = {
     /** @type {BrowserWindow} */
     window: null,
-    focused: false
+    focused: false,
+    mode: 0,
+    scale: 100
 }
 
 // Represents the control panel for the grid
@@ -48,7 +50,7 @@ function createGrid() {
     grid.window.maximize();
     grid.window.show();
     // Load the HTML which displays the P5js grid sketch
-    grid.window.loadFile("grid.html");
+    grid.window.loadFile("grid/index.html");
     // Always show over the top of other apps using "screen saver" mode
     grid.window.setAlwaysOnTop(true, "screen-saver");
     // Always be visible, even in other workspaces
@@ -77,6 +79,8 @@ function createPanel() {
     panel.window = new BrowserWindow(config);
     // Show the window
     panel.window.show();
+    // Load the HTML which displays the P5js grid sketch
+    panel.window.loadFile("panel/index.html");
     // Events to set focused/unfocused state
     panel.window.on('focus', () => { grid.focused = true; });
     panel.window.on('blur', () => { grid.focused = false; });
@@ -105,12 +109,35 @@ function appListen() {
  * Creates listeners for messages from the renderer
  */
 function docListen() {
-    // The renderer wants to know if the app's windows are focused
+    // The grid wants to know if the app's windows are focused
     ipcMain.on('focus-status-request', focusStatusResponse);
+    // The grid wants to know what the grid mode is
+    ipcMain.on('grid-mode-request', gridModeResponse);
+    // The panel wants to alert the app that the grid mode has changed
+    ipcMain.on('grid-mode-alert', gridModeUpdate);
+    // Grid scale
+    ipcMain.on('grid-scale-request', gridScaleResponse);
+    ipcMain.on('grid-scale-alert', gridScaleUpdate);
 }
 
 function focusStatusResponse(event) {
     event.sender.send('focus-status-response', grid.focused || panel.focused);
+}
+
+function gridModeResponse(event) {
+    event.sender.send('grid-mode-response', grid.mode);
+}
+
+function gridScaleResponse(event) {
+    event.sender.send('grid-scale-response', grid.scale);
+}
+
+function gridModeUpdate(_, mode) {
+    grid.mode = mode;
+}
+
+function gridScaleUpdate(_, scale) {
+    grid.scale = scale;
 }
 
 // Start code fired asynchronously for this script
