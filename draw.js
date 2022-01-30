@@ -21,7 +21,7 @@ function setup() {
 // Runs every frame
 function draw() {
     // Check whether the window is in focus (ask the Node process)
-    ipcRenderer.send('asynchronous-message', 'am I focused?')
+    ipcRenderer.send('focus-status-request');
     // Clear the screen
     clear();
     // Checks if the app is the active window
@@ -109,8 +109,6 @@ function polygon(x, y, radius, npoints) {
 }
 
 // When the Node process sends a focus status, update the FOCUSED variable
-ipcRenderer.on('asynchronous-reply', (_, message, arg) => {
-    if (message == 'focus status') {
-        FOCUSED = arg;
-    }
+ipcRenderer.on('focus-status-response', (_, status) => {
+    FOCUSED = status;
 });

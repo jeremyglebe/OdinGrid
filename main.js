@@ -1,17 +1,39 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
-const macOS = process.platform === 'darwin';
-var WINDOW_FOCUSED = false;
+const DEBUG = false;
+const IS_MAC = process.platform === 'darwin';
 
-// Function to create the app window when ready
-function createWindow() {
-    // Basic configuration for the app window
-    const win = new BrowserWindow({
-        // Don't show at first (we need to maximize first)
+// Represents the game grid
+let grid = {
+    /** @type {BrowserWindow} */
+    window: null,
+    focused: false
+}
+
+// Represents the control panel for the grid
+let panel = {
+    /** @type {BrowserWindow} */
+    window: null,
+    focused: false
+}
+
+function create() {
+    // Create the grid and then the control panel
+    createGrid();
+    createPanel();
+}
+
+function createGrid() {
+    /**
+     * @type {Electron.BrowserWindowConstructorOptions} 
+     * Configure the grid's window
+    */
+    const config = {
+        // Don't show at first
         show: false,
         // This window should be see through
-        transparent: true,
+        transparent: DEBUG ? false : true,
         // No frame for the window, it just takes up space
-        frame: false,
+        frame: DEBUG ? true : false,
         // Allows for communication between main.js and draw.js (main process & renderer)
         // This is unsafe if we were loading remote content, but we aren't, so its fine
         // even if SO yells at us for it.
@@ -19,55 +41,90 @@ function createWindow() {
             nodeIntegration: true,
             contextIsolation: false
         }
-    });
-    // Take up as much of the screen as possible
-    win.maximize();
-    // Show the window
-    win.show();
-    // Run our P5js sketch (found in html)
-    win.loadFile("index.html");
+    };
+    // Create the grid's window
+    grid.window = new BrowserWindow(config);
+    // Maximize the grid window size, then show it
+    grid.window.maximize();
+    grid.window.show();
+    // Load the HTML which displays the P5js grid sketch
+    grid.window.loadFile("grid.html");
     // Always show over the top of other apps using "screen saver" mode
-    win.setAlwaysOnTop(true, "screen-saver");
+    grid.window.setAlwaysOnTop(true, "screen-saver");
     // Always be visible, even in other workspaces
-    win.setVisibleOnAllWorkspaces(true);
+    grid.window.setVisibleOnAllWorkspaces(true);
     // Ensures that the app doesn't block mouse clicks and the computer
     // can still be navigated
-    win.setIgnoreMouseEvents(true);
-    // Updates whether the window is currently focused
-    win.on('focus', () => {
-        WINDOW_FOCUSED = true;
-    })
-    win.on('blur', () => {
-        WINDOW_FOCUSED = false;
-    })
+    if (!DEBUG) grid.window.setIgnoreMouseEvents(true);
+    // Events to set focused/unfocused state
+    grid.window.on('focus', () => { grid.focused = true; });
+    grid.window.on('blur', () => { grid.focused = false; });
 }
 
-// Waits until the app's process is ready
-app.whenReady().then(() => {
-    // Create the browser window that renders grids
-    createWindow();
-    // Make sure if the app is being opened, but has no windows (such as
-    // after being closed on Mac) that a new window is created
-    app.on('activate', function () {
-        if (BrowserWindow.getAllWindows().length === 0) createWindow()
+function createPanel() {
+    /** @type {Electron.BrowserWindowConstructorOptions} */
+    const config = {
+        width: 600,
+        height: 600,
+        // Don't show at first
+        show: false,
+        // Same note as above... Lets communication happen
+        webPreferences: {
+            nodeIntegration: true,
+            contextIsolation: false
+        }
+    };
+    panel.window = new BrowserWindow(config);
+    // Show the window
+    panel.window.show();
+    // Events to set focused/unfocused state
+    panel.window.on('focus', () => { grid.focused = true; });
+    panel.window.on('blur', () => { grid.focused = false; });
+    // If we close the panel, we close the grid
+    panel.window.on('close', () => {
+        grid.window.close();
     });
-});
+}
 
-// Event runs when all windows of the app have been closed
-app.on('window-all-closed', function () {
-    // App should exit on everything but Mac
-    // Mac keeps apps open even when their windows are gone
-    if (!macOS) app.quit();
-});
+/**
+ * Creates listeners for events on the electron app
+ */
+function appListen() {
+    // If the app is activated but has not windows open (possible when
+    // re-opening on MacOS) then we should rebuild the windows
+    app.on('activate', function () {
+        if (BrowserWindow.getAllWindows().length === 0) create()
+    });
+    // When the windows are closed, app should exit on everything but Mac
+    app.on('window-all-closed', function () {
+        if (!IS_MAC) app.quit();
+    });
+}
 
-// Handle communication with the renderer
-ipcMain.on('asynchronous-message', (event, message, arg) => {
-    // Renderer may wish to know if the window is focused
-    if (message == "am I focused?") {
-        event.sender.send('asynchronous-reply', 'focus status', WINDOW_FOCUSED);
-    }
-})
+/**
+ * Creates listeners for messages from the renderer
+ */
+function docListen() {
+    // The renderer wants to know if the app's windows are focused
+    ipcMain.on('focus-status-request', focusStatusResponse);
+}
 
-// If on Mac, we must hide from the dock to show over fullscreen apps
-if (macOS)
-    app.dock.hide();
+function focusStatusResponse(event) {
+    event.sender.send('focus-status-response', grid.focused || panel.focused);
+}
+
+// Start code fired asynchronously for this script
+(async () => {
+    // Wait until the app is ready before creating windows
+    await app.whenReady();
+    // Fire the create method first to build everything
+    create();
+    // Create various listeners on the electron app
+    appListen();
+    // Listen for messages from the HTML documents
+    docListen();
+    // If on Mac, we must hide from the dock to show over fullscreen apps
+    // (Is this actually true???)
+    if (IS_MAC)
+        app.dock.hide();
+})();
