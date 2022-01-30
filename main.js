@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain, globalShortcut } = require('electron');
 const DEBUG = false;
 const IS_MAC = process.platform === 'darwin';
 
@@ -128,3 +128,14 @@ function focusStatusResponse(event) {
     if (IS_MAC)
         app.dock.hide();
 })();
+
+// A shortcut to toggle focus on the grid
+// globalShortcut.register('Shift+Alt+G', () => {
+//     if (!WINDOW_FOCUSED) {
+//         win.show();
+//         win.focus();
+//     }
+//     else {
+//         win.blur();
+//     }
+// });
