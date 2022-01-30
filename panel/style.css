@@ -12,7 +12,7 @@ button {
     margin: 0;
 }
 
-#scale {
+.prompt {
     color: white;
     font-size: 24px;
     height: 32px;

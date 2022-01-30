@@ -33,6 +33,22 @@ function keyPressed(event) {
     else if (key == '-') {
         updateGridScale(-ZOOM_INC);
     }
+    // Window controls
+    getGridPos();
+    setTimeout(() => {
+        if (key == "ArrowUp") {
+            ipcRenderer.send('grid-pos-alert', gridPos[0], gridPos[1] - ZOOM_INC);
+        }
+        else if (key == "ArrowDown") {
+            ipcRenderer.send('grid-pos-alert', gridPos[0], gridPos[1] + ZOOM_INC);
+        }
+        else if (key == "ArrowLeft") {
+            ipcRenderer.send('grid-pos-alert', gridPos[0] - ZOOM_INC, gridPos[1]);
+        }
+        else if (key == "ArrowRight") {
+            ipcRenderer.send('grid-pos-alert', gridPos[0] + ZOOM_INC, gridPos[1]);
+        }
+    }, 100);
 }
 
 function toggleGrid() {
@@ -46,4 +62,10 @@ function updateGridScale(amount) {
         document.querySelector("#scale").innerText = `${grid.scale}`;
         ipcRenderer.send('grid-scale-alert', grid.scale);
     }
+}
+
+gridPos = [0, 0];
+ipcRenderer.on('grid-pos-response', (_, arg) => gridPos = arg);
+function getGridPos() {
+    ipcRenderer.send('grid-pos-request');
 }

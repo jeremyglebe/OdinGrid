@@ -118,6 +118,9 @@ function docListen() {
     // Grid scale
     ipcMain.on('grid-scale-request', gridScaleResponse);
     ipcMain.on('grid-scale-alert', gridScaleUpdate);
+    // Window position
+    ipcMain.on('grid-pos-request', gridPosResponse);
+    ipcMain.on('grid-pos-alert', gridPosUpdate);
 }
 
 function focusStatusResponse(event) {
@@ -132,12 +135,20 @@ function gridScaleResponse(event) {
     event.sender.send('grid-scale-response', grid.scale);
 }
 
+function gridPosResponse(event) {
+    event.sender.send('grid-pos-response', grid.window.getPosition());
+}
+
 function gridModeUpdate(_, mode) {
     grid.mode = mode;
 }
 
 function gridScaleUpdate(_, scale) {
     grid.scale = scale;
+}
+
+function gridPosUpdate(_, x, y) {
+    grid.window.setPosition(x, y, true);
 }
 
 // Start code fired asynchronously for this script
