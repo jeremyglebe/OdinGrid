@@ -13,41 +13,21 @@ let grid = {
     scale: 100
 }
 
-function setup() {
-    createCanvas(600, 600);
-    // Create a button to toggle the grid mode
-    createButton('Toggle Grid Mode [G]').position(15, 30).mousePressed(toggleGrid);
-    // Zoom buttons
-    createButton('Zoom Out [-]').position(15, 130).mousePressed(() => updateGridScale(-ZOOM_INC));
-    createButton('Zoom In [+]').position(260, 130).mousePressed(() => updateGridScale(ZOOM_INC));
-}
-
-function draw() {
-    // Black background (Dark mode forever)
-    background(0);
-    // Our font size will be 24px
-    textSize(24);
-    textAlign(LEFT, TOP);
-    // Prepare to draw on background with white
-    fill(255);
-    // Display the current grid mode
-    text(`Grid Mode: ${G_MODES[grid.mode]}`, 270, 36);
-    // Display current zoom level
-    text("Zoom Level", 150, 95);
-    text(`${grid.scale}`, 190, 140);
-}
+// Listen to keypresses
+document.addEventListener('keydown', keyPressed);
 
 /**
  * Pressing keys in this window sends messages to the main process.
  * The main process will then propagate changes to the grid window.
  */
-function keyPressed() {
+function keyPressed(event) {
+    const key = event.key;
     // Toggle the grid mode when pressing G
     if (key == 'g') {
         toggleGrid();
     }
     // Zoom in/out using +(=) and -
-    if (key == '=') {
+    if (key == '=' || key == '+') {
         updateGridScale(ZOOM_INC);
     }
     else if (key == '-') {
@@ -63,6 +43,7 @@ function toggleGrid() {
 function updateGridScale(amount) {
     if (grid.scale + amount > 0) {
         grid.scale += amount;
+        document.querySelector("#scale").innerText = `${grid.scale}`;
         ipcRenderer.send('grid-scale-alert', grid.scale);
     }
 }
