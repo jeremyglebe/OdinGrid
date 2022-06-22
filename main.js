@@ -54,7 +54,7 @@ function createGrid() {
     // Always show over the top of other apps using "screen saver" mode
     grid.window.setAlwaysOnTop(true, "screen-saver");
     // Always be visible, even in other workspaces
-    grid.window.setVisibleOnAllWorkspaces(true);
+    grid.window.setVisibleOnAllWorkspaces(true, { visibleOnFullScreen: true });
     // Ensures that the app doesn't block mouse clicks and the computer
     // can still be navigated
     if (!DEBUG) grid.window.setIgnoreMouseEvents(true);
@@ -169,10 +169,6 @@ function gridPosUpdate(_, x, y) {
     appListen();
     // Listen for messages from the HTML documents
     docListen();
-    // If on Mac, we must hide from the dock to show over fullscreen apps
-    // (Is this actually true???)
-    if (IS_MAC)
-        app.dock.hide();
 })();
 
 // A shortcut to toggle focus on the grid
