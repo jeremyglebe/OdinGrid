@@ -125,7 +125,23 @@ npm start
 
 ### Building Odin Grid Executables
 
-Work-in-progress.
+You will need to install the build tool used for Odin Grid, which is **electron-builder**. If you have NodeJS on your
+machine (you should) you can install electron-builder with the following command:
+
+```sh
+npm i -g electron-builder
+```
+
+After you have electron-builder installed, you should be able to run any of the following commands from the Odin Grid
+directory to build the application. (Note: You may need to be using a device of the given platform, such as building
+for Mac using a Mac device)
+
+```sh
+# Builds a standalone app for Windows in the dist/ folder
+electron-builder build --windows
+# You may also be able to simply use the following command, which should default to targeting your current system
+electron-builder build
+```
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 

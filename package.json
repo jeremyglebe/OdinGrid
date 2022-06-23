@@ -1,14 +1,21 @@
 {
-  "name": "electron-grid",
-  "version": "0.0.1",
-  "description": "Projects a grid onto the screen",
+  "name": "odin-grid",
+  "version": "0.1.2",
+  "description": "A dynamic, customizable game grid for any and all digital tabletops",
   "main": "main.js",
   "scripts": {
     "start": "electron ."
   },
-  "author": "drowsyprof",
+  "author": "jeremyglebe",
   "license": "MIT",
   "devDependencies": {
     "electron": "^16.2.6"
+  },
+  "build": {
+    "appId": "com.jeremyglebe.odin",
+    "productName": "Odin Grid",
+    "win": {
+      "target": "portable"
+    }
   }
 }
