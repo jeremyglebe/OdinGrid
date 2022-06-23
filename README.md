@@ -3,7 +3,7 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/jeremyglebe/OdinGrid">
+  <a href="https://jeremyglebe.com/OdinGrid">
     <img src="images/logo-notext.png" alt="Logo" height="80">
   </a>
 
@@ -13,7 +13,7 @@
     A dynamic, customizable game grid for any and all digital tabletops.
     <br />
     <br />
-    <a href="https://github.com/jeremyglebe/OdinGrid">View Demo</a>
+    <a href="https://drowsyprof.itch.io/odin">Support on Itch</a>
     ·
     <a href="https://github.com/jeremyglebe/OdinGrid/issues">Report Bug</a>
     ·
@@ -54,14 +54,14 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Screenshot of a hexagonal grid displayed over a YouTube video of trees and a river filmed from above](images/screenshot.png)](https://jeremyglebe.com/OdinGrid/)
+[![Screenshot of a hexagonal grid displayed over a YouTube video of trees and a river filmed from above](images/screenshot.png)](https://drowsyprof.itch.io/odin)
 (*OdinGrid displayed over drone footage by Matt Brandt on Youtube. Fullscreen works too!*)
 
 Digital tabletops are cool. If you aren't sure what I'm referring to, digital tabletops are essentially just tables
 which serve as a second monitor for a computer. This allows tabletop gamers who own them to display virtual battlemaps,
 selectively reveal pictures or documents, and more. (Without needing to print anything!)
 
-![Image of a table with a television nested in its center. There is a Macbook on the left and a hand forming a "thumbs up" on the right](images/table.jpg)
+[![Image of a table with a television nested in its center. There is a Macbook on the left and a hand forming a "thumbs up" on the right](images/table.jpg)](https://drowsyprof.itch.io/odin)
 (*Pictured above is my digital tabletop, hacked together out of an old table with the help of my dad, who is giving the \*thumbs up\**)
 
 Perhaps the coolest feature of digital tabletops are animated battlemaps. (Many of which also come with sound!) Digital
@@ -105,9 +105,10 @@ These beautiful frameworks made Odin Grid possible.
 You have two choices to run Odin Grid. You can clone this open source repository, install the dependencies, then
 run or build Odin Grid from the project directory.
 
-You can also purchase some pre-built executables for Windows and
-Mac on the project's Itch.Io page. (Work-in-progress) You can also purchase on Itch just to support me if you like
-the software. I can't tell you how much I would appreciate that.
+You can also purchase some pre-built executables for Windows and Mac on the project's Itch.Io page. Purchasing Odin
+Grid on Itch.Io helps support me and my development efforts. I can't tell you how much I would appreciate that.
+
+[Click here to purchase on Itch.Io](https://drowsyprof.itch.io/odin)
 
 Instructions to build the project yourself are found below.
 
