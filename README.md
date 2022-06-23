@@ -4,7 +4,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/jeremyglebe/OdinGrid">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
+    <img src="images/logo-notext.png" alt="Logo" height="80">
   </a>
 
   <h3 align="center">Odin Grid</h3>
@@ -54,13 +54,19 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-![OdinGrid Name Card](https://example.com)
+[![Screenshot of a hexagonal grid displayed over a YouTube video of trees and a river filmed from above](images/screenshot.png)](https://jeremyglebe.com/OdinGrid/)
+(*OdinGrid displayed over drone footage by Matt Brandt on Youtube. Fullscreen works too!*)
 
 Digital tabletops are cool. If you aren't sure what I'm referring to, digital tabletops are essentially just tables
-which serve as a second monitor for a computer. This allows the owner to display virtual battlemaps, selectively reveal
-pictures or documents, and more. (Without needing to print anything!) Perhaps the coolest feature of virtual tabletops
-are animated battlemaps. (Many of which also come with sound!) Digital tabletops can come in the form of televisions
-mounted inside of tables, projectors facing down from the ceiling, and many more solutions.
+which serve as a second monitor for a computer. This allows tabletop gamers who own them to display virtual battlemaps,
+selectively reveal pictures or documents, and more. (Without needing to print anything!)
+
+![Image of a table with a television nested in its center. There is a Macbook on the left and a hand forming a "thumbs up" on the right](images/table.jpg)
+(*Pictured above is my digital tabletop, hacked together out of an old table with the help of my dad, who is giving the \*thumbs up\**)
+
+Perhaps the coolest feature of digital tabletops are animated battlemaps. (Many of which also come with sound!) Digital
+tabletops can come in the form of televisions mounted inside of tables, projectors facing down from the ceiling, and
+many more solutions.
 
 Digital tabletops can also be difficult to use. There are a lot of barriers during set up, one of which is
 **actually obtaining fun and usable maps**. Maps for DTTs come in several forms: videos, gifs, sometimes projects for
@@ -131,6 +137,7 @@ Work-in-progress.
 - [x] Overlay square and hex grids
 - [x] Display grids over fullscreen applications
 - [ ] Improve user interface
+- [ ] Allow screen blackout and brush to reveal
 
 See the [open issues](https://github.com/jeremyglebe/OdinGrid/issues) for a full list of proposed features (and known issues).
 
